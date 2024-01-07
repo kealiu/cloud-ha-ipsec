@@ -71,7 +71,7 @@ ENDSTATE=\$3
 NAME=\$2
 TYPE=\$1
 
-if [ "${ENDSTATE}" != "MASTER" ] ; then
+if [ "\${ENDSTATE}" != "MASTER" ] ; then
         echo "\$(date +'%D-%X.%N') enter \${ENDSTATE} mode" >> /tmp/keepalived-script.log
         sleep 5
         exit
