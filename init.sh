@@ -67,12 +67,12 @@ MY_TOPIC=$(echo ${MY_PEER_CONFIG} | jq -r '.sns')
 # create switchover script
 cat > /usr/local/bin/master.sh << EoF
 #!/bin/bash
-ENDSTATE=$3
-NAME=$2
-TYPE=$1
+ENDSTATE=\$3
+NAME=\$2
+TYPE=\$1
 
 if [ "${ENDSTATE}" != "MASTER" ] ; then
-        echo "\$(date +'%D-%X.%N') enter ${ENDSTATE} mode" >> /tmp/keepalived-script.log
+        echo "\$(date +'%D-%X.%N') enter \${ENDSTATE} mode" >> /tmp/keepalived-script.log
         sleep 5
         exit
 fi
