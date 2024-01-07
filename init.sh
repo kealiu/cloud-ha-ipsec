@@ -67,7 +67,16 @@ MY_TOPIC=$(echo ${MY_PEER_CONFIG} | jq -r '.sns')
 # create switchover script
 cat > /usr/local/bin/master.sh << EoF
 #!/bin/bash
-echo "\$(date +\"%D %X.%N\") start switchover to master" >> /tmp/keepalived-script.log
+ENDSTATE=$3
+NAME=$2
+TYPE=$1
+
+if [ "${ENDSTATE}" != "MASTER" ] ; then
+        echo "$(date +'%D-%X.%N') enter ${ENDSTATE} mode" >> /tmp/keepalived-script.log
+        sleep 5
+        exit
+fi
+echo "\$(date +'%D %X.%N') start switchover to master" >> /tmp/keepalived-script.log
 VPCRTTBL=\$(aws ec2 describe-route-tables --filters Name=vpc-id,Values=${MY_VPC_ID})
 for rt in \$(echo \${VPCRTTBL} | jq -r -c '.RouteTables[] | select(.Routes[]?.NetworkInterfaceId=="${MY_PEER_ENI}")');
 do
@@ -81,7 +90,7 @@ done
 
 aws sns publish --topic-arn "${MY_TOPIC}" --message "${MY_INSTANCE_ID}/${MY_PRIVATE_IP} changed to MASTER"
 
-echo "\$(date +\"%D %X.%N\") end switchover to master" >> /tmp/keepalived-script.log
+echo "\$(date +'%D %X.%N') end switchover to master" >> /tmp/keepalived-script.log
 EoF
 
 chmod a+x /usr/local/bin/master.sh
@@ -112,7 +121,7 @@ vrrp_instance VI_1 {
          ipsec
     }
 
-    notify_master "/usr/local/bin/master.sh"
+    notify "/usr/local/bin/master.sh"
 }
 EoF
 
