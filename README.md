@@ -13,3 +13,10 @@ A High-Available(by Keepalived) Implementation of IPsec(by Strongswan) VPN
 The ndoe will update `route table` directly, by replace peer ENI with master node's ENI. 
 
 and, it will also send notification via SNS, which you can subscript and trigger some webhook
+
+# Credit
+
+- for HA, it depends on [keepalived](https://github.com/acassen/keepalived)
+- for IPSec, it use [Strongswan](https://github.com/strongswan/strongswan)
+
+Any question you can open an issue or connect me directly, thanks for star it.
